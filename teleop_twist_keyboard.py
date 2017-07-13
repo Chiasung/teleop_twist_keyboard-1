@@ -9,7 +9,7 @@ from std_msgs.msg import MultiArrayDimension
 import sys, select, termios, tty
 
 msg = """
-Reading from the keyboard  and Publishing to Twist!
+Reading from the keyboard  and Publishing to Twist and MultiArray
 ---------------------------
 Moving around:
    u    i    o
@@ -25,14 +25,13 @@ For Holonomic mode (strafing), hold down the shift key:
 g : up (+z)
 b : down (-z)
 
-===================================
 For Robotic Arm 
 --------------------------
-Joint Ang Jog(+)  1  2  3  4  5  6   
-Joint Ang jOG(-)  q  w  e  r  t  y
+   Joint Ang Jog(+)  1  2  3  4  5  6   
+   Joint Ang Jog(-)  q  w  e  r  t  y
 
 f/v : increase/decreas increament deg  by 10%
-====================================
+
 anything else : stop
 
 a/z : increase/decrease max speeds by 10%
@@ -87,14 +86,14 @@ armMoveBindings = {
 speedBindings={
 		'a':(1.1,1.1),
 		'z':(0.9,0.9),
-		's':(1.1,1  ),
-		'x':( .9,1  ),
-		'd':(1  ,1.1),
-		'c':(1  , .9),
+		's':(1.1,1),
+		'x':(0.9,1),
+		'd':(1,1.1),
+		'c':(1,0.9),
             }
 jointAngSpeedBindings={ 
-        'f':(1.1),
-        'v':(0.9), 
+        	'f':(1.1),
+        	'v':(0.9), 
 	    }
 
 def getKey():
@@ -113,25 +112,25 @@ if __name__=="__main__":
     	settings = termios.tcgetattr(sys.stdin)
 	
 	pub    = rospy.Publisher('wheelVel_cmd', Twist, queue_size = 1)
-	armPub = rospy.Publisher('jointAng_signal',Float32MultiArray,queue_size = 1)
+	armPub = rospy.Publisher('jointAng_cmd',Float32MultiArray,queue_size = 1)
 	rospy.init_node('teleop_twist_keyboard')
 
 	speed = rospy.get_param("~speed", 0.5)
 	turn  = rospy.get_param("~turn",  1.0)
-    jointAngSpeed = rospy.get_param("~angSpeed", 1)
+    	jointAngSpeed = rospy.get_param("~angSpeed", 1)
 	x      = 0
 	y      = 0
 	z      = 0
 	th     = 0
 	status = 0
 
-    jointAng1 = 90.
-    jointAng2 = 90.
-    jointAng3 = 90.
-    jointAng4 = 90.
-    jointAng5 = 90.
-    jointAng6 = 90.
-    jointAng7 = 90. 
+    	jointAng1 = 90.
+    	jointAng2 = 90.
+    	jointAng3 = 90.
+    	jointAng4 = 90.
+    	jointAng5 = 90.
+    	jointAng6 = 90.
+    	jointAng7 = 90. 
 
 	try:
                 
@@ -171,12 +170,12 @@ if __name__=="__main__":
 				twist.angular.z = th*turn
 				pub.publish(twist)
        
-            elif key in jointAngSpeedBindings.keys():
-  	            jointAngSpeed = jointAngSpeed * jointAngSpeedBindings[key]
-                print "curr joint Speed  %s  " % (jointAngSpeed)
+            		elif key in jointAngSpeedBindings.keys():
+  	            		jointAngSpeed = jointAngSpeed * jointAngSpeedBindings[key]
+                		print "curr joint Speed  %s  " % (jointAngSpeed)
 
 			elif key in armMoveBindings.keys():
-                theta1 = armMoveBindings[key][0]
+                		theta1 = armMoveBindings[key][0]
 				theta2 = armMoveBindings[key][1]
 				theta3 = armMoveBindings[key][2]
 				theta4 = armMoveBindings[key][3]				
@@ -197,19 +196,18 @@ if __name__=="__main__":
 				jointAng4 = jointAng4 + theta4 * jointAngSpeed
 				jointAng5 = jointAng5 + theta5 * jointAngSpeed
 				jointAng6 = jointAng6 + theta6 * jointAngSpeed
-
-                if (jointAng2 < 0 ): jointAng2 = 0
-                if (jointAng3 < 0 ): jointAng3 = 0 
-                if (jointAng2 + jointAng3 > 209):
-                   	jointAng2 = 209 - jointAng3
+				
+                		if (jointAng2 < 0 ): jointAng2 = 0
+                		if (jointAng3 < 0 ): jointAng3 = 0 
+                		if (jointAng2 + jointAng3 > 209): jointAng2 = 209 - jointAng3
 				if (jointAng4 < 0): jointAng4 = 0
-                if (jointAng4 >170): jointAng4 =170
-                if (jointAng5 >180): jointAng5 = 180
-                if (jointAng5 <0  ): jointAng5 = 0
-                if (jointAng6 >180): jointAng6 = 180
-                if (jointAng6 <0  ): jointAng6 = 0
+                		if (jointAng4 >170): jointAng4 =170
+                		if (jointAng5 >180): jointAng5 = 180
+                		if (jointAng5 <0  ): jointAng5 = 0
+                		if (jointAng6 >180): jointAng6 = 180
+                		if (jointAng6 <0  ): jointAng6 = 0
  
-                theta_1_6.data[0] = jointAng1
+                		theta_1_6.data[0] = jointAng1
 				theta_1_6.data[1] = jointAng2
 				theta_1_6.data[2] = jointAng3
 				theta_1_6.data[3] = jointAng4
@@ -236,10 +234,8 @@ if __name__=="__main__":
 				twist.angular.z = th*turn
 				pub.publish(twist)
 				
-				
 				if (key == '\x03'):
 					break
-
 
 	except:
 		print e
