@@ -11,21 +11,24 @@ Moving around:
    u    i    o
    j    k    l
    m    ,    .
-
 For Holonomic mode (strafing), hold down the shift key:
 ---------------------------
    U    I    O
    J    K    L
    M    <    >
-
-t : up (+z)
+g : up (+z)
 b : down (-z)
-
+===================================
+For Robotic Arm 
+--------------------------
+Joint Ang Jog(+)  1  2  3  4  5  6   
+Joint Ang jOG(-)  q  w  e  r  t  y
+f/v : increase/decreas increament deg  by 10%
+====================================
 anything else : stop
-
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
+a/z : increase/decrease max speeds by 10%
+s/x : increase/decrease only linear speed by 10%
+d/c : increase/decrease only angular speed by 10%
 
 CTRL-C to quit
 ```
